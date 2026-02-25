@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -26,6 +27,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="it">
       <head>
+        {/* Start cookieyes banner */}
+        <Script
+          id="cookieyes"
+          type="text/javascript"
+          src="https://cdn-cookieyes.com/client_data/91925e790ed2865554d632381ed44cc4/script.js"
+          strategy="beforeInteractive"
+        />
+        {/* End cookieyes banner */}
         <link rel="icon" href="/images/logoNuovo.png?v=3" sizes="any" />
         <link rel="shortcut icon" href="/images/logoNuovo.png?v=3" />
         <link rel="apple-touch-icon" href="/images/logoNuovo.png?v=3" />

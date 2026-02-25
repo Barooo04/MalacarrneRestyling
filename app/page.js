@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { FaWhatsapp, FaComments, FaArrowRight, FaPhone, FaMapMarkerAlt, FaEnvelope, FaBars, FaTimes } from "react-icons/fa";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const services = [
   {
@@ -272,7 +274,6 @@ export default function Home() {
         <section id="home" className="hero">
           <div className="container hero-grid">
             <motion.div className="hero-copy" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-              <p className="eyebrow">Studio Malacarne</p>
               <h1>Affidabilità, competenza e visione per la tua impresa.</h1>
               <p className="lead">
                 Un partner professionale che trasforma la complessità amministrativa in chiarezza gestionale, con due sedi sul territorio e oltre vent&apos;anni di esperienza.
@@ -309,7 +310,20 @@ export default function Home() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.28, ease: "easeOut" }}
                     >
-                      {message.text}
+                      {message.isAssistant ? (
+                        <div className="chat-markdown">
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={{
+                              a: ({ ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" />,
+                            }}
+                          >
+                            {message.text}
+                          </ReactMarkdown>
+                        </div>
+                      ) : (
+                        message.text
+                      )}
                     </motion.div>
                   ))}
                   {isTyping && (
@@ -462,7 +476,7 @@ export default function Home() {
           </div>
           <div className="studio-fullbleed">
             <article className="studio-tile">
-              <Image src="/images/studioCastelfranco.png" alt="Studio Castelfranco" width={1200} height={850} />
+              <Image src="/images/castelfrancoangolazione.jpeg" alt="Studio Castelfranco" width={1200} height={850} />
               <div className="studio-overlay" />
               <div className="studio-tile-content">
                 <div className="studio-top">
