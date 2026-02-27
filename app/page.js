@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
-import { FaWhatsapp, FaComments, FaArrowRight, FaPhone, FaMapMarkerAlt, FaEnvelope, FaBars, FaTimes } from "react-icons/fa";
+import { FaWhatsapp, FaComments, FaArrowRight, FaPhone, FaMapMarkerAlt, FaEnvelope, FaBars, FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -68,6 +68,13 @@ const fadeInUp = {
 const CHAT_API_BASE = process.env.NEXT_PUBLIC_CHAT_API || "https://servermalacarne.onrender.com/api";
 const SESSION_THREAD_KEY = "malacarne_chat_thread_id";
 const SESSION_TOKEN_KEY = "malacarne_chat_token";
+const PONSACCO_IMAGES = [
+  "/images/Ponsacco1.jpg",
+  "/images/Ponsacco2.jpg",
+  "/images/Ponsacco3.jpg",
+  "/images/Ponsacco4.jpg",
+  "/images/Ponsacco5.jpg",
+];
 
 function extractText(content) {
   if (typeof content === "string") return content;
@@ -89,6 +96,7 @@ export default function Home() {
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [ponsaccoImageIndex, setPonsaccoImageIndex] = useState(0);
   const abortControllerRef = useRef(null);
   const messagesRef = useRef(null);
   const chatInputRef = useRef(null);
@@ -105,6 +113,14 @@ export default function Home() {
     if (!messagesRef.current) return;
     messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
   }, [messages, isTyping]);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setPonsaccoImageIndex((prev) => (prev + 1) % PONSACCO_IMAGES.length);
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   const handleNewChat = () => {
     if (abortControllerRef.current) {
@@ -217,13 +233,21 @@ export default function Home() {
     chatInputRef.current?.focus();
   };
 
+  const handlePrevPonsaccoImage = () => {
+    setPonsaccoImageIndex((prev) => (prev - 1 + PONSACCO_IMAGES.length) % PONSACCO_IMAGES.length);
+  };
+
+  const handleNextPonsaccoImage = () => {
+    setPonsaccoImageIndex((prev) => (prev + 1) % PONSACCO_IMAGES.length);
+  };
+
   return (
     <div className="site">
       <header className="navbar">
         <div className="container nav-inner">
           <a href="#home" className="brand">
             <Image
-              src="/images/logoNuovo.png"
+              src="/images/LogoDefinitivo.svg"
               alt="Studio Malacarne"
               width={70}
               height={70}
@@ -531,7 +555,39 @@ export default function Home() {
               </div>
             </article>
             <article className="studio-tile">
-              <Image src="/images/studioPonsacco.png" alt="Studio Ponsacco" width={1200} height={850} />
+              <AnimatePresence initial={false}>
+                <motion.div
+                  key={PONSACCO_IMAGES[ponsaccoImageIndex]}
+                  className="studio-image-layer"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.28, ease: "easeOut" }}
+                >
+                  <Image
+                    src={PONSACCO_IMAGES[ponsaccoImageIndex]}
+                    alt="Studio Ponsacco"
+                    fill
+                    sizes="(max-width: 1040px) 100vw, 50vw"
+                  />
+                </motion.div>
+              </AnimatePresence>
+              <button
+                type="button"
+                className="studio-carousel-arrow left"
+                aria-label="Foto precedente sede di Ponsacco"
+                onClick={handlePrevPonsaccoImage}
+              >
+                <FaChevronLeft aria-hidden="true" focusable="false" />
+              </button>
+              <button
+                type="button"
+                className="studio-carousel-arrow right"
+                aria-label="Foto successiva sede di Ponsacco"
+                onClick={handleNextPonsaccoImage}
+              >
+                <FaChevronRight aria-hidden="true" focusable="false" />
+              </button>
               <div className="studio-overlay" />
               <div className="studio-tile-content">
                 <div className="studio-top">
@@ -623,7 +679,7 @@ export default function Home() {
         <div className="container footer-grid">
           <div className="footer-brand">
             <Image
-              src="/images/logoNuovo.png"
+              src="/images/LogoDefinitivoBianco.svg"
               alt="Studio Malacarne"
               width={260}
               height={80}

@@ -328,7 +328,7 @@ export default function InformativaPrivacyPage() {
         <div className="container nav-inner">
           <Link href="/" className="brand">
             <Image
-              src="/images/logoNuovo.png"
+              src="/images/LogoDefinitivo.svg"
               alt="Studio Malacarne"
               width={70}
               height={70}
@@ -408,7 +408,7 @@ export default function InformativaPrivacyPage() {
         <div className="container footer-grid">
           <div className="footer-brand">
             <Image
-              src="/images/logoNuovo.png"
+              src="/images/LogoDefinitivoBianco.svg"
               alt="Studio Malacarne"
               width={260}
               height={80}

@@ -17,9 +17,9 @@ export const metadata = {
   description:
     "Restyling moderno del sito Studio Malacarne: consulenza fiscale, societaria e strategica per imprese e professionisti.",
   icons: {
-    icon: "/images/logoNuovo.png",
-    shortcut: "/images/logoNuovo.png",
-    apple: "/images/logoNuovo.png",
+    icon: "/images/logoFavicon.svg",
+    shortcut: "/images/logoFavicon.svg",
+    apple: "/images/logoFavicon.svg",
   },
 };
 
@@ -35,9 +35,9 @@ export default function RootLayout({ children }) {
           strategy="beforeInteractive"
         />
         {/* End cookieyes banner */}
-        <link rel="icon" href="/images/logoNuovo.png?v=3" sizes="any" />
-        <link rel="shortcut icon" href="/images/logoNuovo.png?v=3" />
-        <link rel="apple-touch-icon" href="/images/logoNuovo.png?v=3" />
+        <link rel="icon" href="/images/logoFavicon.svg" sizes="any" />
+        <link rel="shortcut icon" href="/images/logoFavicon.svg" />
+        <link rel="apple-touch-icon" href="/images/logoFavicon.svg" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {children}
