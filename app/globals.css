@@ -80,7 +80,7 @@ a {
 }
 
 .brand-logo {
-  width: 120px !important;
+  width: 102px !important;
   height: auto !important;
   object-fit: cover;
   object-position: center;
@@ -1009,8 +1009,8 @@ a {
 }
 
 .footer-logo-img {
-  width: 280px;
-  height: 120px;
+  width: 100px;
+  height: 88px;
   object-fit: cover;
   object-position: center;
 }
@@ -1142,7 +1142,7 @@ a {
   }
 
   .brand-logo {
-    width: 100px !important;
+    width: 88px !important;
   }
 
   .mobile-menu-toggle {
@@ -1298,7 +1298,7 @@ a {
   }
 
   .brand-logo {
-    width: 100px !important;
+    width: 82px !important;
   }
 
   .hero {
@@ -1428,8 +1428,8 @@ a {
   }
 
   .footer-logo-img {
-    width: 220px;
-    height: 96px;
+    width: 188px;
+    height: 72px;
   }
 
   .footer-brand {

@@ -12,10 +12,64 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.studiomalacarne.com";
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION;
+
 export const metadata = {
-  title: "Studio Malacarne | Consulenza professionale",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Studio Malacarne | Consulenza professionale per imprese",
+    template: "%s | Studio Malacarne",
+  },
   description:
-    "Restyling moderno del sito Studio Malacarne: consulenza fiscale, societaria e strategica per imprese e professionisti.",
+    "Studio Malacarne supporta imprese e professionisti con consulenza fiscale, societaria, contabile e strategica nelle sedi di Castelfranco di Sotto e Ponsacco.",
+  keywords: [
+    "Studio Malacarne",
+    "commercialista Castelfranco di Sotto",
+    "commercialista Ponsacco",
+    "consulenza fiscale",
+    "consulenza societaria",
+    "revisione legale",
+    "business plan",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Studio Malacarne | Consulenza professionale per imprese",
+    description:
+      "Consulenza fiscale, societaria e strategica per imprese e professionisti. Due sedi operative in provincia di Pisa.",
+    url: siteUrl,
+    siteName: "Studio Malacarne",
+    locale: "it_IT",
+    type: "website",
+    images: [
+      {
+        url: "/images/LogoDefinitivo.svg",
+        width: 1200,
+        height: 630,
+        alt: "Studio Malacarne",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Studio Malacarne | Consulenza professionale per imprese",
+    description:
+      "Consulenza fiscale, societaria e strategica per imprese e professionisti. Due sedi operative in provincia di Pisa.",
+    images: ["/images/LogoDefinitivo.svg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  ...(googleSiteVerification
+    ? {
+        verification: {
+          google: googleSiteVerification,
+        },
+      }
+    : {}),
   icons: {
     icon: "/images/logoFavicon.svg",
     shortcut: "/images/logoFavicon.svg",
