@@ -686,7 +686,6 @@ export default function Home() {
               className="footer-logo-img"
             />
             <div className="footer-brand-copy">
-              <p className="footer-title">Studio Malacarne</p>
               <p className="footer-text">
                 Affidabilità e competenza per 
                 <br />
