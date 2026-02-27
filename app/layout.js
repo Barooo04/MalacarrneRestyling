@@ -13,7 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.studiomalacarne.com";
-const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION;
+const googleSiteVerification =
+  process.env.GOOGLE_SITE_VERIFICATION || "Hu5OzT7zSl3oPWUFgUviCrAjvK72XSyTzLdDI6GGxn0";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
