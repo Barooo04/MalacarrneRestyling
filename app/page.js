@@ -66,8 +66,7 @@ const fadeInUp = {
 };
 
 const CHAT_API_BASE = process.env.NEXT_PUBLIC_CHAT_API || "https://servermalacarne.onrender.com/api";
-const SESSION_THREAD_KEY = "malacarne_chat_thread_id";
-const SESSION_TOKEN_KEY = "malacarne_chat_token";
+const SESSION_RESPONSE_KEY = "malacarne_chat_last_response_id";
 const PONSACCO_IMAGES = [
   "/images/Ponsacco1.jpg",
   "/images/Ponsacco2.jpg",
@@ -76,21 +75,9 @@ const PONSACCO_IMAGES = [
   "/images/Ponsacco5.jpg",
 ];
 
-function extractText(content) {
-  if (typeof content === "string") return content;
-  if (Array.isArray(content)) {
-    return content
-      .map((item) => item?.text?.value || item?.text || item)
-      .filter(Boolean)
-      .join("\n");
-  }
-  return content?.text?.value || JSON.stringify(content || "");
-}
-
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [threadId, setThreadId] = useState(null);
-  const [chatToken, setChatToken] = useState(null);
+  const [lastResponseId, setLastResponseId] = useState(null);
   const [messages, setMessages] = useState([
     { id: 1, text: "Ciao! Come posso aiutarti oggi?", isAssistant: true },
   ]);
@@ -103,10 +90,8 @@ export default function Home() {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const savedThreadId = sessionStorage.getItem(SESSION_THREAD_KEY);
-    const savedToken = sessionStorage.getItem(SESSION_TOKEN_KEY);
-    if (savedThreadId) setThreadId(savedThreadId);
-    if (savedToken) setChatToken(savedToken);
+    const savedResponseId = sessionStorage.getItem(SESSION_RESPONSE_KEY);
+    if (savedResponseId) setLastResponseId(savedResponseId);
   }, []);
 
   useEffect(() => {
@@ -127,11 +112,9 @@ export default function Home() {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
-    setThreadId(null);
-    setChatToken(null);
+    setLastResponseId(null);
     if (typeof window !== "undefined") {
-      sessionStorage.removeItem(SESSION_THREAD_KEY);
-      sessionStorage.removeItem(SESSION_TOKEN_KEY);
+      sessionStorage.removeItem(SESSION_RESPONSE_KEY);
     }
     setMessages([{ id: 1, text: "Ciao! Come posso aiutarti oggi?", isAssistant: true }]);
     setInputValue("");
@@ -153,47 +136,16 @@ export default function Home() {
     setIsTyping(true);
 
     try {
-      let currentThreadId = threadId;
-      let currentToken = chatToken;
-
-      if (!currentThreadId) {
-        const createResponse = await fetch(`${CHAT_API_BASE}/conversation`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(currentToken ? { Authorization: `Bearer ${currentToken}` } : {}),
-          },
-          body: JSON.stringify({ message }),
-          signal: abortController.signal,
-        });
-
-        if (!createResponse.ok) {
-          throw new Error("Errore nella creazione della sessione chat");
-        }
-
-        const createData = await createResponse.json();
-        currentThreadId = createData.threadId;
-        currentToken = createData.token || currentToken;
-        setThreadId(currentThreadId);
-        if (currentThreadId && typeof window !== "undefined") {
-          sessionStorage.setItem(SESSION_THREAD_KEY, currentThreadId);
-        }
-        if (currentToken && typeof window !== "undefined") {
-          setChatToken(currentToken);
-          sessionStorage.setItem(SESSION_TOKEN_KEY, currentToken);
-        }
-      }
+      const requestBody = lastResponseId
+        ? { message, previousResponseId: lastResponseId }
+        : { message };
 
       const convResponse = await fetch(`${CHAT_API_BASE}/conversation`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(currentToken ? { Authorization: `Bearer ${currentToken}` } : {}),
         },
-        body: JSON.stringify({
-          threadId: currentThreadId,
-          message,
-        }),
+        body: JSON.stringify(requestBody),
         signal: abortController.signal,
       });
 
@@ -202,8 +154,16 @@ export default function Home() {
       }
 
       const convData = await convResponse.json();
-      const assistantMessage = convData.messages?.find((msg) => msg.role === "assistant");
-      const assistantText = extractText(assistantMessage?.content);
+      const assistantText = (convData.output_text || "").trim();
+      const nextResponseId = convData.responseId || null;
+      const leadSubmitted = Boolean(convData.leadSubmitted);
+
+      if (nextResponseId) {
+        setLastResponseId(nextResponseId);
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem(SESSION_RESPONSE_KEY, nextResponseId);
+        }
+      }
 
       setMessages((prev) => [
         ...prev,
@@ -212,6 +172,15 @@ export default function Home() {
           text: assistantText || "Ricevuto. Ti rispondo al più presto.",
           isAssistant: true,
         },
+        ...(leadSubmitted
+          ? [
+              {
+                id: prev.length + 2,
+                text: "Dati ricevuti, ti contatteremo presto.",
+                isAssistant: true,
+              },
+            ]
+          : []),
       ]);
     } catch (error) {
       if (error.name !== "AbortError") {
@@ -226,6 +195,7 @@ export default function Home() {
       }
     } finally {
       setIsTyping(false);
+      abortControllerRef.current = null;
     }
   };
 
@@ -247,10 +217,10 @@ export default function Home() {
         <div className="container nav-inner">
           <a href="#home" className="brand">
             <Image
-              src="/images/LogoDefinitivo.svg"
+              src="/images/LogoEsteso.png"
               alt="Studio Malacarne"
-              width={70}
-              height={70}
+              width={260}
+              height={80}
               priority
               className="brand-logo"
             />
@@ -262,9 +232,9 @@ export default function Home() {
             <a href="#studio">Lo Studio</a>
             <a href="#contatti">Contatti</a>
           </nav>
-          <a className="cta-small" href="https://wa.me/393331234567" target="_blank" rel="noreferrer">
-            <FaWhatsapp aria-hidden="true" focusable="false" />
-            <span>Scrivici</span>
+          <a className="cta-small" href="tel:+390587732559" aria-label="Chiama il numero 0587 732559">
+            <FaPhone aria-hidden="true" focusable="false" />
+            <span>Chiama</span>
           </a>
           <button
             type="button"
@@ -283,13 +253,11 @@ export default function Home() {
           <a href="#contatti" onClick={() => setIsMobileMenuOpen(false)}>Contatti</a>
           <a
             className="mobile-whatsapp-link"
-            href="https://wa.me/393331234567"
-            target="_blank"
-            rel="noreferrer"
+            href="tel:+390587732559"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <FaWhatsapp aria-hidden="true" focusable="false" />
-            <span>Scrivici su WhatsApp</span>
+            <FaPhone aria-hidden="true" focusable="false" />
+            <span>Chiama 0587 732559</span>
           </a>
         </div>
       </header>

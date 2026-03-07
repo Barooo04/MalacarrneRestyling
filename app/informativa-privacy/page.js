@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaWhatsapp, FaBars, FaTimes } from "react-icons/fa";
+import { FaPhone, FaBars, FaTimes } from "react-icons/fa";
 
 const privacyText = `INFORMATIVA SULLA PRIVACY
 ai sensi dell'art. 13 del Regolamento (UE) 2016/679 (GDPR)
@@ -328,10 +328,10 @@ export default function InformativaPrivacyPage() {
         <div className="container nav-inner">
           <Link href="/" className="brand">
             <Image
-              src="/images/LogoDefinitivo.svg"
+              src="/images/LogoEsteso.png"
               alt="Studio Malacarne"
-              width={70}
-              height={70}
+              width={260}
+              height={80}
               priority
               className="brand-logo"
             />
@@ -343,9 +343,9 @@ export default function InformativaPrivacyPage() {
             <Link href="/#studio">Lo Studio</Link>
             <Link href="/#contatti">Contatti</Link>
           </nav>
-          <a className="cta-small" href="https://wa.me/393331234567" target="_blank" rel="noreferrer">
-            <FaWhatsapp aria-hidden="true" focusable="false" />
-            <span>Scrivici</span>
+          <a className="cta-small" href="tel:+390587732559" aria-label="Chiama il numero 0587 732559">
+            <FaPhone aria-hidden="true" focusable="false" />
+            <span>Chiama</span>
           </a>
           <button
             type="button"
@@ -364,13 +364,11 @@ export default function InformativaPrivacyPage() {
           <Link href="/#contatti" onClick={() => setIsMobileMenuOpen(false)}>Contatti</Link>
           <a
             className="mobile-whatsapp-link"
-            href="https://wa.me/393331234567"
-            target="_blank"
-            rel="noreferrer"
+            href="tel:+390587732559"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <FaWhatsapp aria-hidden="true" focusable="false" />
-            <span>Scrivici su WhatsApp</span>
+            <FaPhone aria-hidden="true" focusable="false" />
+            <span>Chiama 0587 732559</span>
           </a>
         </div>
       </header>

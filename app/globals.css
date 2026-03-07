@@ -80,7 +80,7 @@ a {
 }
 
 .brand-logo {
-  width: 102px !important;
+  width: 200px !important;
   height: auto !important;
   object-fit: cover;
   object-position: center;
@@ -118,6 +118,7 @@ a {
 .cta-small svg {
   width: 15px;
   height: 15px;
+  transform: scaleX(-1);
 }
 
 .cta-small:hover {
@@ -1143,7 +1144,7 @@ a {
   }
 
   .brand-logo {
-    width: 65px !important;
+    width: 180px !important;
   }
 
   .mobile-menu-toggle {
@@ -1200,6 +1201,10 @@ a {
     background: var(--brand) !important;
     color: #ffffff !important;
   }
+
+.mobile-whatsapp-link svg {
+  transform: scaleX(-1);
+}
 
   .hero-grid,
   .split,
@@ -1305,7 +1310,7 @@ a {
   }
 
   .brand-logo {
-    width: 60px !important;
+    width: 160px !important;
   }
 
   .hero {
